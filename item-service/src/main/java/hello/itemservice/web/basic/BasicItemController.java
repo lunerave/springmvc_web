@@ -20,6 +20,7 @@ public class BasicItemController {
 
     @GetMapping
     public String items(Model model) {
+
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
         return "basic/items";
@@ -27,6 +28,7 @@ public class BasicItemController {
 
     @GetMapping("/{itemId}")
     public String item(@PathVariable long itemId, Model model) {
+
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "basic/item";
@@ -74,7 +76,7 @@ public class BasicItemController {
         return "basic/item";
     }
 
-    @PostMapping("/add")
+//    @PostMapping("/add")
     public String addItemV4(Item item, Model model) {
         // @ModelAttribute 이름 안 넣으면 클래스 첫 글자를 소문자로 바꾼 이름이 자동으로 등록 됨. Item -> item
         // Item은 임의로 만든 객체이므로 @ModelAttribute 생략 시에도 자동으로 적용됨.
@@ -83,6 +85,18 @@ public class BasicItemController {
         model.addAttribute("item", item); // @ModelAttribute 사용 시 생략 가능
 
         return "basic/item";
+    }
+
+    @PostMapping("/add")
+    public String addItemV5(Item item) {
+        // @ModelAttribute 이름 안 넣으면 클래스 첫 글자를 소문자로 바꾼 이름이 자동으로 등록 됨. Item -> item
+        // Item은 임의로 만든 객체이므로 @ModelAttribute 생략 시에도 자동으로 적용됨.
+        // Model 역시 생략 가능
+
+        itemRepository.save(item);
+        //model.addAttribute("item", item); // @ModelAttribute 사용 시 생략 가능
+
+        return "redirect:/basic/items/" + item.getId();
     }
 
     @GetMapping("/{itemId}/edit")
